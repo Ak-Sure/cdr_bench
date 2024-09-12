@@ -1,6 +1,0 @@
-# GTM parameters
-num_nodes = [225, 625, 1600]  # 15^2, 25^2, 40^2
-num_basis_functions = [100, 400, 1225]  # 10^2, 20^2, 35^2
-reg_coeff = [1, 10, 100]
-basis_width = [0.1, 0.4, 0.8, 1.2]
-n_components = 2  # Change this value based on the desired components

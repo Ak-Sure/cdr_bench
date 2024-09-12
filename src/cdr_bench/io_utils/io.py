@@ -10,7 +10,7 @@ from collections import defaultdict
 from src.cdr_bench.scoring.scoring import calculate_distance_matrix
 
 import rpy2.robjects as robjects
-
+import toml
 import os
 
 
@@ -459,3 +459,82 @@ def load_fp_array(file_path: str) -> np.ndarray:
     with h5py.File(file_path, 'r') as h5file:
         fp_array = h5file['fp'][()] if 'fp' in h5file else None
     return fp_array
+
+
+def load_config(config_file: str) -> dict:
+    """Load the configuration from a TOML file."""
+    with open(config_file, 'r') as f:
+        config = toml.load(f)
+    return config
+
+
+def validate_config(config: dict) -> None:
+    """
+    Validates the TOML configuration for required fields, types, and values.
+
+    Args:
+        config (dict): The loaded configuration dictionary.
+
+    Raises:
+        ValueError: If the configuration is invalid.
+    """
+    # Define the required keys and their types
+    required_keys = {
+        "data_path": str,
+        "output_dir": str,
+        "methods": list,
+        "n_components": int,
+        "k_neighbors": list,
+        "optimization_type": str,
+        "scaling": str,
+        "similarity_metric": str,
+        "sample_size": int,
+        "test": bool,
+        "plot_data": bool
+    }
+
+    # Check if all required keys are present
+    for key, expected_type in required_keys.items():
+        if key not in config:
+            raise ValueError(f"Missing required config key: {key}")
+
+        # Check if the key has the correct type
+        if not isinstance(config[key], expected_type):
+            raise ValueError(f"Incorrect type for {key}: Expected {expected_type}, got {type(config[key])}")
+
+    # Check if the paths exist
+    if not os.path.exists(config["data_path"]):
+        raise ValueError(f"data_path does not exist: {config['data_path']}")
+
+    if not os.path.isdir(config["output_dir"]):
+        raise ValueError(f"output_dir does not exist or is not a directory: {config['output_dir']}")
+
+    # Check if methods list contains valid methods
+    valid_methods = ["UMAP", "t-SNE", "GTM", "PCA"]
+    for method in config["methods"]:
+        if method not in valid_methods:
+            raise ValueError(f"Invalid method: {method}. Valid methods are: {valid_methods}")
+
+    # Validate optimization type
+    if config["optimization_type"] not in ["insample", "outsample"]:
+        raise ValueError("Invalid optimization_type. Must be 'insample' or 'outsample'.")
+
+    # Validate scaling options
+    valid_scaling = ["standard", "minmax", "none"]
+    if config["scaling"] not in valid_scaling:
+        raise ValueError(f"Invalid scaling option: {config['scaling']}. Must be one of {valid_scaling}.")
+
+    # Validate similarity metric
+    valid_metrics = ["euclidean", "tanimoto"]
+    if config["similarity_metric"] not in valid_metrics:
+        raise ValueError(f"Invalid similarity metric: {config['similarity_metric']}. Must be one of {valid_metrics}.")
+
+    # Validate the k_neighbors values
+    if not all(isinstance(k, int) for k in config["k_neighbors"]):
+        raise ValueError("k_neighbors must be a list of integers.")
+
+    # Validate if sample_size is positive
+    if config["sample_size"] <= 0:
+        raise ValueError("sample_size must be a positive integer.")
+
+    print("Configuration file is valid.")

@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from collections import defaultdict
-from cdr.scoring.scoring import calculate_distance_matrix
+from src.cdr_bench.scoring.scoring import calculate_distance_matrix
 
 import rpy2.robjects as robjects
 

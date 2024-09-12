@@ -7,28 +7,23 @@ import logging
 import h5py
 from typing import Any, Dict, List, Optional, Tuple, Union
 import toml
-from cdr.optimization.optimization import create_param_grid
-from cdr.optimization.params import TSNEParams, GTMParams, UMAPParams
-from cdr.visualization.visualization import plot_optimization_results
-from cdr.scoring.scoring import calculate_distance_matrix, calculate_nn_overlap_list, \
+from src.cdr_bench.optimization.optimization import create_param_grid
+from src.cdr_bench.optimization.params import TSNEParams, GTMParams, UMAPParams
+from src.cdr_bench.visualization import plot_optimization_results
+from src.cdr_bench.scoring.scoring import calculate_distance_matrix, calculate_nn_overlap_list, \
     calculate_metrics, prepare_nearest_neighbors, fit_nearest_neighbors
-from cdr.optimization.optimization import perform_optimization
-from cdr.optimization.params import ScoringParams
-from cdr.io_utils.data_preprocessing import get_eigen_vectors_values, \
-    remove_duplicates, prepare_data_for_optimization, create_output_directory, \
-    get_pca_results
-from cdr.io_utils.io import save_optimization_results
+from src.cdr_bench.optimization.optimization import perform_optimization
+from src.cdr_bench.optimization.params import ScoringParams
+from src.cdr_bench.io_utils.data_preprocessing import remove_duplicates, prepare_data_for_optimization, \
+    create_output_directory, get_pca_results
+from src.cdr_bench.io_utils.io import save_optimization_results
 
 from collections import defaultdict, namedtuple
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def load_config(config_file: str) -> dict:
-    """Load the configuration from a TOML file."""
-    with open(config_file, 'r') as f:
-        config = toml.load(f)
-    return config
+
 
 
 def initialize_methods_and_params(test: bool) -> tuple:

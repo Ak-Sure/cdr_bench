@@ -1,0 +1,25 @@
+[project]
+name = "cdr_bench"
+version = "0.1.0"
+description = "Scripts for performing dimensionality reduciton on chemical datasets"
+authors = [
+    {name = "Alexey Orlov", email = "data2scale@gmail.com"}
+]
+dependencies = [
+    "setuptools>=74.1.2",
+    "h5py",
+    "numpy",
+    "pandas",
+]
+requires-python = "==3.11.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "cdr-bench @ file:///${PROJECT_ROOT}/",
+]

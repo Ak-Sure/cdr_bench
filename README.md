@@ -5,10 +5,11 @@ This repository contains the data and scripts required to reproduce the results 
 
 ## Repository Structure
 
-- **cdr**: Contains the core code necessary to reproduce the results.
+- **src**: Contains the essential code for data preprocessing, dimensionality reduction, optimization, analysis, and visualization.
 - **datasets**: Contains the datasets utilized in the study.
 - **notebooks**: Includes Jupyter notebooks used for data analysis and visualization.
 - **results**: Stores the optimized low-dimensional embeddings and all calculated metrics.
+- **scripts**: Includes master scripts for data preparation, running benchmarks, and analyzing results.
 
 ## Datasets
 The `datasets` directory houses the chemical datasets used throughout the study.
@@ -20,4 +21,24 @@ The `results` directory includes the optimized low-dimensional embeddings and al
 The `notebooks` directory contains Jupyter notebooks for data analysis, visualization, and further exploration of the study's findings.
 
 ## Code
-The `cdr` directory contains all the scripts and code necessary to reproduce the results of the study. 
+### Core code
+The `src/cdr_bench` directory contains various components for dimensionality reduction benchmarking:
+
+- **`dr_methods/`** – Directory containing code for different dimensionality reduction methods.
+- **`features/`** – Contains code for feature extraction and processing.
+- **`io_utils/`** – Utility code for input/output operations.
+- **`method_configs/`** – Configuration files for different benchmarking methods.
+- **`optimization/`** – Code for optimization routines.
+- **`scoring/`** – Contains code for scoring and evaluating methods.
+- **`visualization/`** – Code for visualizing benchmarking results.
+
+
+
+### Scripts
+
+The `scripts` directory contains the master scripts for data preparation, running benchmarks, and analyzing results:
+
+- **`run_optimization.py`** – Main script for running optimization processes.
+- **`analyze_results.py`** – Script for automated result analysis.
+- **`prepare_lolo.py`** – Script for splitting datasets in leave-one-library-out (LOLO) mode.
+

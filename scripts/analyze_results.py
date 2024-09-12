@@ -7,13 +7,11 @@ from glob import glob
 from tqdm import tqdm
 from docx import Document
 import argparse
-import h5py
-from cdr.io_utils.io import load_hdf5_data, save_dict_to_hdf5, read_ambient_dist_and_pca_results, read_optimization_results
-from cdr.io_utils.data_preprocessing import prepare_data_for_optimization, get_pca_results
-from cdr.visualization.visualization import plot_combined_metrics, plot_scatter_coordinates, plot_combined_metrics_all
+from cdr.io_utils.io import read_ambient_dist_and_pca_results, read_optimization_results
+from src.cdr_bench.visualization import plot_combined_metrics, plot_scatter_coordinates, plot_combined_metrics_all
 from cdr.scoring.scoring import (calculate_distance_matrix,
-                                 calculate_nn_overlap_list, calculate_metrics, fit_nearest_neighbors)
-from typing import Dict, List, Tuple, Any
+                                 calculate_nn_overlap_list, fit_nearest_neighbors)
+from typing import Dict, List, Any
 from pathlib import Path
 import pandas as pd
 from collections import defaultdict

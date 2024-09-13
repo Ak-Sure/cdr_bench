@@ -1,16 +1,15 @@
 import numpy as np
 from sklearn.model_selection import ParameterGrid
-import torch
 import logging
 from copy import deepcopy
 from tqdm import tqdm
 import h5py
 import pickle
 from typing import Any, Dict, List, Tuple, Optional
-from cdr.io_utils.data_preprocessing import prepare_data_for_method
-from cdr.dr_methods.dimensionality_reduction import DimReducer
-from cdr.scoring.scoring import DRScorer
-from cdr.optimization.params import OptimizerParams
+from src.cdr_bench.io_utils.data_preprocessing import prepare_data_for_method
+from src.cdr_bench.dr_methods.dimensionality_reduction import DimReducer
+from src.cdr_bench.scoring.scoring import DRScorer
+from src.cdr_bench.optimization.params import OptimizerParams
 import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -65,27 +64,12 @@ def create_param_grid(data_shape: int, n_components: int, method: str = 'UMAP', 
                 'basis_width': [0.4, 0.8, 1.2, 2.4, 3.6, 10]}
             """
             param_grid = {
-                'num_nodes': [15 ** 2, 25 ** 2, 40 ** 2],
-                'num_basis_functions': [10 ** 2, 20 ** 2, 35 ** 2],
-                'reg_coeff': [1, 10, 100],
-                'basis_width': [0.1, 0.4, 0.8, 1.2]
+                'k': [15, 25, 40 ],
+                'm': [10, 20, 35],
+                'regul': [1, 10, 100],
+                's': [0.1, 0.4, 0.8, 1.2]
             }
 
-        elif n_components == 3:
-            param_grid = {
-                'num_nodes': [int(round(15/2)) ** 3, int(round(25/2)) ** 3, int(round(40/2)) ** 3],
-                'num_basis_functions': [int(round(10/2)) ** 3, int(round(20/2)) ** 3, int(round(35/2)) ** 3],
-                'reg_coeff': [1, 10, 100],
-                'basis_width': [0.4, 0.8, 1, 2, 3]
-            }
-        #param_grid = {
-        #'num_nodes': [25 ** 2, 35**2, 40 ** 2],
-        #'num_basis_functions': [10 ** 2, 20 ** 2, 35 ** 2],
-        #'reg_coeff': [0.1, 1, 100],
-        #'basis_width': [0.8, 1.2, 2.4, 3.6]}
-
-    #elif method == 'PCA':
-    #    param_grid = {'n_components': None}  # TODO rewrite to real n_components and correct add_dim
 
     if add_dim:
         param_grid['n_components'] = [2, 3]

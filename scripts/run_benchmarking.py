@@ -34,10 +34,13 @@ def initialize_methods_and_params(test: bool) -> tuple:
         tuple: method_grids and method_params
     """
 
-    # Load parameter grids from TOML files using the same load_config function
-    umap_params = load_config('umap_config.toml')
-    tsne_params = load_config('tsne_config.toml')
-    gtm_params = load_config('gtm_config.toml')
+    # Define the path to the method_configs directory
+    config_dir = os.path.join(os.getcwd(), 'bench_configs', 'method_configs')
+
+    # Load parameter grids from TOML files
+    umap_params = load_config(os.path.join(config_dir, 'umap_config.toml'))
+    tsne_params = load_config(os.path.join(config_dir, 'tsne_config.toml'))
+    gtm_params = load_config(os.path.join(config_dir, 'gtm_config.toml'))
 
     # Handle test mode by limiting the number of parameter combinations
     if test:

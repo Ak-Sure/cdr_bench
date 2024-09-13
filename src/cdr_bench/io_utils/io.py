@@ -520,7 +520,7 @@ def validate_config(config: dict) -> None:
         raise ValueError("Invalid optimization_type. Must be 'insample' or 'outsample'.")
 
     # Validate scaling options
-    valid_scaling = ["standard", "minmax", "none"]
+    valid_scaling = ["standardize", "minmax", "none"]
     if config["scaling"] not in valid_scaling:
         raise ValueError(f"Invalid scaling option: {config['scaling']}. Must be one of {valid_scaling}.")
 

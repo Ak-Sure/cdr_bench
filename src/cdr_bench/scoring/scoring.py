@@ -8,7 +8,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.base import BaseEstimator
 from numba import jit, njit, prange
 from typing import List, Any, Callable, Dict, Union, Optional, Tuple
-from cdr.optimization.params import ScoringParams
+from src.cdr_bench.optimization.params import ScoringParams
 
 
 @jit(nopython=True, parallel=True)

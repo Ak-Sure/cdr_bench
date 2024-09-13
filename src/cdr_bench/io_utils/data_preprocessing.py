@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 
-import torch
 import warnings
 from typing import Dict, Any, Optional, Tuple, List, Union
 import h5py
@@ -14,7 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, FunctionTransformer
 from sklearn.decomposition import PCA
 
-from cdr.features.feature_preprocessing import find_nonconstant_features, remove_constant_features
+from src.cdr_bench.features.feature_preprocessing import find_nonconstant_features, remove_constant_features
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

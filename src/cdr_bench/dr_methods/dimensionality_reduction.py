@@ -2,7 +2,7 @@ from sklearn.decomposition import PCA
 from openTSNE.sklearn import TSNE
 from umap import UMAP
 from ugtm import eGTM as ScikitLearnGTM
-from cdr.optimization.params import DimReducerParams
+from src.cdr_bench.optimization.params import DimReducerParams
 import numpy as np
 from typing import Optional, Any, Dict
 

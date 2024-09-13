@@ -100,7 +100,7 @@ def check_hdf5_file_format(file_path):
             raise ValueError(f"HDF5 file must contain a 'features' group")
 
 
-def read_features_hdf5_dataframe(file_path):
+def load_hdf5_dataframe(file_path):
     with h5py.File(file_path, 'r') as h5file:
         # Read dataset and smi
         dataset = pd.Series(h5file['dataset']['dataset'][:], name='dataset')

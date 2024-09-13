@@ -8,8 +8,15 @@ authors = [
 dependencies = [
     "setuptools>=74.1.2",
     "h5py",
-    "numpy",
+    "numpy<2.1",
     "pandas",
+    "scipy>=1.14.1",
+    "matplotlib>=3.9.2",
+    "scikit-learn>=1.5.2",
+    "numba>=0.60.0",
+    "rpy2>=3.5.16",
+    "toml>=0.10.2",
+    "seaborn>=0.13.2",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
@@ -22,4 +29,5 @@ distribution = false
 [tool.pdm.dev-dependencies]
 dev = [
     "cdr-bench @ file:///${PROJECT_ROOT}/",
+    "jupyterlab>=4.2.5",
 ]

@@ -211,7 +211,7 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
         logging.info(f"Error processing {dataset_name} with feature set {feature_name}: {e}")
 
 
-def process_validation_data(val_data_path: str) -> Tuple[Optional[pd.DataFrame], Dict[str, Any]]:
+def process_validation_data(val_data_path: str) -> Tuple[Optional[pd.DataFrame], Dict[str, Any]]: # TODO change this to read_features_hdf5_dataframe
     """
     Process the validation data from an HDF5 file.
 
@@ -273,7 +273,7 @@ def main(config: dict) -> None:
     for h5_file in h5_files:
         logging.info(f'Started to process file {h5_file}')
 
-        with h5py.File(h5_file, 'r') as hf:
+        with h5py.File(h5_file, 'r') as hf: # TODO change this to read_features_hdf5_dataframe
             dataset_name = os.path.basename(h5_file).split('.')[0]
             for feature_name in hf['features'].keys():
                 logging.info(f'Processing feature set: {feature_name}')

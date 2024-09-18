@@ -153,8 +153,7 @@ class Optimizer:
                 self.best_score = score
                 self.best_params = deepcopy(params)
                 self.best_model = deepcopy(self.estimator.model)
-                self.best_transformed = transformed.detach().numpy() if isinstance(transformed,
-                                                                                   torch.Tensor) else transformed
+                self.best_transformed = transformed
 
                 if self.verbose >= 1:
                     logging.info(f"New best score: {self.best_score}")

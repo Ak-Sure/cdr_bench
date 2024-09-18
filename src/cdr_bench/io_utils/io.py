@@ -9,14 +9,14 @@ import pandas as pd
 from collections import defaultdict
 from src.cdr_bench.scoring.scoring import calculate_distance_matrix
 
-import rpy2.robjects as robjects
+#import rpy2.robjects as robjects
 import toml
 import os
 
+"""
+path = '../scoring/'
 
-path = '../cdr/scoring/'
-
-def scagnostics(x, y):
+def scagnostics(x, y): # TODO requires proper R installation
     all_scags = {}
     r_source = robjects.r['source']
     r_source(os.path.join(path, 'get_scag.r'))
@@ -32,8 +32,9 @@ def scagnostics(x, y):
     all_scags['stringy'] = scags[7]
     all_scags['monotonic'] = scags[8]
     return all_scags
+"""
 
-def generate_charts_for_subdirectories(base_dir: str, methods_to_extract: List[str]) -> None:
+def generate_charts_for_subdirectories(base_dir: str, methods_to_extract: List[str]) -> None:  # deal with R installation
     """
     Generate radar charts for each subdirectory in the base directory.
 
@@ -42,7 +43,7 @@ def generate_charts_for_subdirectories(base_dir: str, methods_to_extract: List[s
     - methods_to_extract: list, list of methods to extract
     """
     all_data = []
-
+    """
     # Walk through the directory tree
     for root, subdirs, _ in os.walk(base_dir):
         # Only process directories with specific subdirectories
@@ -78,8 +79,8 @@ def generate_charts_for_subdirectories(base_dir: str, methods_to_extract: List[s
                         'measure': measure
                     })
     return all_data
-
-
+    """
+    return "Function needs proper R installation"
 
 def check_hdf5_file_format(file_path):
     required_dataset_group = ['dataset', 'smi']

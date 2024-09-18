@@ -85,14 +85,10 @@ class TSNEParams(DimReducerParams):
 @dataclass
 class GTMParams(DimReducerParams):
     """Class for keeping track of GTM-specific parameters, inheriting from DimReducerParams."""
-    num_nodes: int = field(default_factory=int)
-    num_basis_functions: int = field(default_factory=int)
-    basis_width: float = 1.1
-    reg_coeff: float = 1.0
-    standardize: bool = False
-    pca_scale: bool = True
-    pca_engine: Dict[str, Any] = field(default_factory=dict)
-    topology: str = 'square'
+    k: int = field(default_factory=int)
+    m: int = field(default_factory=int)
+    s: float = 1.1
+    regul: float = 1.0
 
     @staticmethod
     def default_params(n_components: int) -> Dict[str, Any]:
@@ -110,23 +106,13 @@ class GTMParams(DimReducerParams):
         """
         if n_components == 3:
             return {
-                'num_nodes': 512,
-                'num_basis_functions': 125,
-                'basis_width': 1.0,
-                'reg_coeff': 1.0,
-                'standardize': False,
-                'pca_scale': True,
-                'pca_engine': {}
             }
         elif n_components == 2:
             return {
-                'num_nodes': 225,
-                'num_basis_functions': 169,
-                'basis_width': 1.0,
-                'reg_coeff': 1.0,
-                'standardize': False,
-                'pca_scale': True,
-                'pca_engine': {}
+                'k': 15,
+                'm': 13,
+                's': 1.0,
+                'regul': 1.0,
             }
         else:
             raise ValueError("Unsupported number of components")

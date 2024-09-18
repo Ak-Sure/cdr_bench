@@ -21,6 +21,24 @@ from collections import defaultdict, namedtuple
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def create_gtm_params(n_components: int) -> GTMParams:
+    """
+    Creates an instance of GTMParams with default parameters based on the number of components.
+
+    Args:
+        n_components (int): Number of components for GTM.
+
+    Returns:
+        GTMParams: An instance of GTMParams with default settings.
+    """
+    params = GTMParams.default_params(n_components)
+    return GTMParams(
+        method='GTM',
+        k=params['k'],
+        m=params['m'],
+        s=params['s'],
+        regul=params['regul']
+    )
 
 def initialize_methods_and_params(test: bool) -> tuple:
     """
@@ -35,7 +53,7 @@ def initialize_methods_and_params(test: bool) -> tuple:
     """
 
     # Define the path to the method_configs directory
-    config_dir = os.path.join(os.getcwd(), 'bench_configs', 'method_configs')
+    config_dir = os.path.join(os.getcwd(), '../bench_configs', 'method_configs') # TODO change this to smth more appropriate
 
     # Load parameter grids from TOML files
     umap_params = load_config(os.path.join(config_dir, 'umap_config.toml'))
@@ -43,19 +61,30 @@ def initialize_methods_and_params(test: bool) -> tuple:
     gtm_params = load_config(os.path.join(config_dir, 'gtm_config.toml'))
 
     # Handle test mode by limiting the number of parameter combinations
-    if test:
+    if test:  # TODO correct bug here
+        pass
+        """
         for param_grid in [umap_params, tsne_params, gtm_params]:
             for key in param_grid:
                 param_grid[key] = [param_grid[key][0]]  # Limit to first value for each parameter
+        """
 
     # Create method grids using the loaded TOML configs
     method_grids = {
-        'UMAP': UMAPParams(umap_params),
-        't-SNE': TSNEParams(tsne_params),
-        'GTM': GTMParams(gtm_params)
+        'UMAP': umap_params,
+        't-SNE': tsne_params,
+        'GTM': gtm_params
     }
 
-    return method_grids
+
+    method_params = {
+        't-SNE': TSNEParams(method='t-SNE', n_jobs=12, negative_gradient_method='fft', initialization='pca'),
+        'UMAP': UMAPParams(method='UMAP', n_jobs=12, init='pca'),
+        'GTM': create_gtm_params(n_components=2)
+    }
+
+    return method_grids, method_params
+
 
 
 def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
@@ -112,6 +141,7 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                                                               n_components)
 
         pca_coords = X_pca_embedded if y_pca_embedded is None or optimization_type == 'outsample' else y_pca_embedded
+
 
         # Calculate distance matrices in latent and original spaces
         if similarity_metric == 'tanimoto':

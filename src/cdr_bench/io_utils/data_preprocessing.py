@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-
 import warnings
 from typing import Dict, Any, Optional, Tuple, List, Union
 import h5py
@@ -257,27 +256,6 @@ def get_pca_results(X_transformed: np.ndarray, y_transformed: Optional[np.ndarra
 
     return X_pca_embedded, y_pca_embedded, pca
 
-
-def prepare_data_for_method(X_transformed: np.ndarray, y_transformed: Optional[np.ndarray], method: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
-    """
-    Prepare data for a specific dimensionality reduction method.
-
-    Args:
-        X_transformed (np.ndarray): The transformed high-dimensional data.
-        y_transformed (Optional[np.ndarray]): The transformed reference high-dimensional data.
-        method (str): The dimensionality reduction method to use.
-
-    Returns:
-        Tuple[np.ndarray, Optional[np.ndarray]]: The prepared high-dimensional data and reference data.
-    """
-    if method == 'GTM':
-        X_prepared = torch.from_numpy(X_transformed).double()
-        y_prepared = torch.from_numpy(y_transformed).double() if y_transformed is not None else None
-    else:
-        X_prepared = X_transformed
-        y_prepared = y_transformed
-
-    return X_prepared, y_prepared
 
 
 

@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import Dict, Any, List, Optional, Tuple
 import os
+import networkx as nx
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import seaborn as sns
@@ -12,6 +13,32 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
+def visualize_networks(networks: Dict[float, nx.Graph], similarity_matrix: np.ndarray) -> None:
+    """
+    Visualize each network in a side-by-side layout to compare different thresholds.
+
+    Args:
+        networks (Dict[float, nx.Graph]): Dictionary of networks where keys are thresholds
+                                          and values are NetworkX graph objects.
+        similarity_matrix (np.ndarray): The similarity matrix used to display edge labels.
+
+    Returns:
+        None: Displays a matplotlib figure showing the networks.
+    """
+    num_networks = len(networks)
+    fig, axes = plt.subplots(1, num_networks, figsize=(18, 5))
+    fig.suptitle("Chemical Similarity Networks at Different Thresholds", fontsize=16)
+
+    for idx, (threshold, G) in enumerate(networks.items()):
+        pos = nx.spring_layout(G)
+        ax = axes[idx]
+        ax.set_title(f"Threshold: {threshold}")
+        nx.draw(G, pos, with_labels=True, node_color="lightblue", edge_color="gray", ax=ax)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels={(i, j): f"{similarity_matrix[i, j]:.2f}" for i, j in G.edges()}, ax=ax)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.show()
 
 def create_radar_chart_subplots(data: pd.DataFrame, attributes: List[str], methods: List[str],
                                 filename: Optional[str] = None, fill: Optional[bool] = False,

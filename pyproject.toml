@@ -23,7 +23,9 @@ dependencies = [
     "ugtm>=2.1.0.post2",
     "umap-learn>=0.5.6",
     "dgllife>=0.3.2",
-    "lightning>=2.4.0"
+    "lightning>=2.4.0",
+    "pandarallel>=1.6.5",
+    "ipywidgets>=8.1.5",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"

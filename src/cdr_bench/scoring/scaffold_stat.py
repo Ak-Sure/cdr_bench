@@ -17,6 +17,7 @@ def calculate_scaffold_frequencies_and_f50(scaffolds: List[str], save_distributi
     """
     scaffold_counts = pd.Series(scaffolds).value_counts()
     scaffold_df = pd.DataFrame({'scaffold': scaffold_counts.index, 'frequency': scaffold_counts.values})
+    scaffold_df = scaffold_df[scaffold_df['scaffold'] != '']
     scaffold_df['cumulative_fraction'] = scaffold_df['frequency'].cumsum() / scaffold_df['frequency'].sum()
 
     # F50 is the minimum fraction of scaffolds required to cover 50% of molecules
@@ -24,4 +25,4 @@ def calculate_scaffold_frequencies_and_f50(scaffolds: List[str], save_distributi
     if save_distribution:
         return scaffold_df, f50
     else:
-        f50
+        return f50

@@ -55,15 +55,7 @@ def create_param_grid(data_shape: int, n_components: int, method: str = 'UMAP', 
             "exaggeration": [1, 2, 3, 4, 5, 6, 8, 16, 32]  #np.linspace(4, 40, 6)
         }
     elif method == 'GTM':
-        if n_components == 2:
-            """
-            param_grid = {
-                'num_nodes': [25 ** 2, 35 ** 2, 40 ** 2, 50 ** 2],
-                'num_basis_functions': [10 ** 2, 20 ** 2, 35 ** 2, 45 ** 2],
-                'reg_coeff': [0.01, 0.1, 1, 100, 1000],
-                'basis_width': [0.4, 0.8, 1.2, 2.4, 3.6, 10]}
-            """
-            param_grid = {
+        param_grid = {
                 'k': [15, 25, 40 ],
                 'm': [10, 20, 35],
                 'regul': [1, 10, 100],
@@ -74,7 +66,8 @@ def create_param_grid(data_shape: int, n_components: int, method: str = 'UMAP', 
     if add_dim:
         param_grid['n_components'] = [2, 3]
 
-    param_grid['n_components'] = [n_components]
+    if method != 'GTM':
+        param_grid['n_components'] = [n_components]
 
     if test:
         # Reduce to a single combination of parameters
@@ -105,7 +98,7 @@ class Optimizer:
     def _filter_gtm_params(self, param_grid):
         valid_params = []
         for params in ParameterGrid(param_grid):
-            if params['num_basis_functions'] < params['num_nodes']:
+            if params['m'] < params['k']:
                 # Ensure all single values are wrapped in a list
                 for key in params.keys():
                     if not isinstance(params[key], list):

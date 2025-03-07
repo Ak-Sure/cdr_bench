@@ -23,8 +23,7 @@ class DimReducer:
             'PCA': {'n_components': 2},
             'UMAP': {'n_components': 2},
             't-SNE': {'n_components': 2, 'verbose': False},
-            'GTM': {'n_components': 2, 'num_nodes': 225, 'num_basis_functions': 169, 'basis_width': 1.1, 'reg_coeff': 1,
-                    'standardize': False}
+            'GTM': {'k': 15, 'm': 5, 's': 1.1, 'regul': 1}
         }
 
     @staticmethod

@@ -152,7 +152,11 @@ def prepare_data_for_optimization(data_df: pd.DataFrame, val_data_df: Optional[p
         scaling Optional[str]: The type of the feature preprocessing to use (standardization by default)
 
     Returns:
-        Tuple[np.ndarray, Optional[np.ndarray]]: Scaled high-dimensional data and optionally scaled reference data.
+        Tuple[pd.DataFrame, Optional[pd.DataFrame], np.ndarray, Optional[np.ndarray]]: 
+            - processed data DataFrame with constant features removed
+            - processed validation DataFrame with constant features removed (if provided)
+            - scaled high-dimensional data (X_transformed)
+            - scaled reference data (y_transformed, if validation data was provided)
     """
 
     # Extract and scale the fingerprints from the main dataset
@@ -257,6 +261,20 @@ def get_pca_results(X_transformed: np.ndarray, y_transformed: Optional[np.ndarra
     return X_pca_embedded, y_pca_embedded, pca
 
 
+def prepare_data_for_method(X_transformed: np.ndarray, y_transformed: Optional[np.ndarray], method: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+    """
+    Prepare data for a specific dimensionality reduction method.
+
+    Args:
+        X_transformed (np.ndarray): The transformed high-dimensional data.
+        y_transformed (Optional[np.ndarray]): The transformed reference high-dimensional data.
+        method (str): The dimensionality reduction method to use.
+
+    Returns:
+        Tuple[np.ndarray, Optional[np.ndarray]]: The prepared high-dimensional data and reference data.
+    """
+
+    return X_transformed, y_transformed  # TODO: add method specific preprocessing if required
 
 
 

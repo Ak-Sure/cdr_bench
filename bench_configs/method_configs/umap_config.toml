@@ -1,4 +1,4 @@
 # UMAP parameters
-n_neighbors = [2, 4, 6, 8, 16, 32, 64, 128, 256]
-min_dist = [0.0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 0.99]
+n_neighbors = [2]#[2, 4, 6, 8, 16, 32, 64, 128, 256]
+min_dist = [0.1]#[0.0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 0.99]
 n_components = [2]  # Change this value based on the desired components

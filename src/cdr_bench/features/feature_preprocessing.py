@@ -54,6 +54,7 @@ def generate_fingerprints(data_df: pd.DataFrame, radius: int = 2, fp_size: int =
     return data_df
 
 
+
 def gen_desc(generator: rdFingerprintGenerator, smi: str) -> Optional[np.ndarray]:
     """
     Generate a molecular fingerprint as a NumPy array from a SMILES string.
@@ -72,6 +73,28 @@ def gen_desc(generator: rdFingerprintGenerator, smi: str) -> Optional[np.ndarray
         return generator.GetCountFingerprintAsNumPy(mol)
     except Exception as e:
         return None
+
+# Added a function to generate RDKit fingerprints
+def gen_rdkit_desc(generator: rdFingerprintGenerator, smi: str) -> Optional[np.ndarray]:
+    """
+    Generate a RDKit fingerprint as a NumPy array from a SMILES string.
+
+    Args:
+        generator (rdFingerprintGenerator.FingerprintGenerator): The fingerprint generator.
+        smi (str): The SMILES string.
+
+    Returns:
+        Optional[np.ndarray]: The molecular fingerprint as a NumPy array, or None if an error occurs.
+    """
+    try:
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None:
+            return None
+        return generator.GetCountFingerprintAsNumPy(mol)
+    except Exception as e:
+        return None
+
+
 
 
 def get_features(file_path: str, use_fingerprints: bool = True, radius: int = 2, fp_size: int = 1024) -> pd.DataFrame:

@@ -1,0 +1,24 @@
+# General Configuration
+data_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\tests\\test_datasets"  # Path to the dataset
+output_dir = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output"  # Path to save output files
+test = false  # Whether to run in test mode (uses only one hyperparameter for each model)
+plot_data = true  # Whether to plot data after processing
+
+# Dimensionality Reduction Methods to Use
+methods = [ "PCA"]  # List of methods to apply 
+
+# PCA Configuration
+n_components = 2  # Number of PCA components
+
+# Nearest Neighbors Configuration
+k_neighbors = [2, 5, 10, 20, 50]  # List of k values for nearest neighbors
+k_hit = 20  # Number of nearest neighbors for hit calculation (must be in k_neighbors)
+
+# Optimization Configuration
+optimization_type = "insample"  # Options: "insample" or "outsample"
+scaling = "minmax"  # Scaling method, options: "standard", "minmax", etc.
+similarity_metric = "euclidean"  # Similarity metric to use: "euclidean", "tanimoto"
+sample_size = 2500  # Sample size for metrics calculation
+
+# Logging Configuration
+log_level = "INFO"  # Options: "DEBUG", "INFO", "WARNING", "ERROR"

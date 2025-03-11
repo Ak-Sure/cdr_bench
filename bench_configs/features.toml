@@ -1,26 +1,13 @@
 # Paths for input and output files
-[input]
-input_path = "../datasets/"  # Path where input SMILES files are located
-file_pattern = "*.smi"  # File pattern for input files (e.g., "*.csv", "*.smi")
-output_path = "../tests/features/"  # Path where output HDF5 files will be saved
 
-# ChemDist Model settings
-[chemdist]
-model_path = "../datasets/model_trained.pt"  # Path to the trained model .pt file
-device = "cuda"  # Device to use for computation, can be "cuda" or "cpu"
-
-[chemdist.params]  # Model parameters
-edge_in_feats = 12  # Number of edge features
-embed_size = 16  # Size of the embedding vector
-node_in_feats = 74  # Number of node features
+input_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\datasets\\"  # Path where input SMILES files are located
+file_pattern = "*.csv"  # File pattern for input files (e.g., "*.csv", "*.smi")
+output_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output\\"  # Path where output HDF5 files will be saved
 
 # Morgan Count Fingerptint generation settings
 [morgan]
 morgan_radius = 2  # Radius for Morgan fingerprints
 morgan_fp_size = 1024  # Size of the Morgan fingerprint (e.g., 1024 bits)
-
-# MACCS keys generation settings
-[maccs]
 
 # Whether to preprocess descriptors
 [preprocess]

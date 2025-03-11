@@ -1,12 +1,11 @@
 # General Configuration
-data_path = "/path/to/dataset.h5"  # Path to the dataset
-output_dir = "/path/to/output/directory"  # Path to save output files
-val_data_path = "/path/to/validation_dataset.h5"  # Optional path to validation data (can be empty)
+data_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output\\"  # Path to the dataset
+output_dir = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output2\\"  # Path to save output files
 test = false  # Whether to run in test mode
 plot_data = true  # Whether to plot data after processing
 
 # Dimensionality Reduction Methods to Use
-methods = ["UMAP", "t-SNE", "GTM", "PCA"]  # List of methods to apply
+methods = ["PCA"]  # List of methods to apply
 
 # PCA Configuration
 n_components = 2  # Number of PCA components
@@ -17,7 +16,7 @@ k_hit = 20  # Number of nearest neighbors for hit calculation (must be in k_neig
 
 # Optimization Configuration
 optimization_type = "insample"  # Options: "insample" or "outsample"
-scaling = "standard"  # Scaling method, options: "standard", "minmax", etc.
+scaling = "minmax"  # Scaling method, options: "standard", "minmax", etc.
 similarity_metric = "euclidean"  # Similarity metric to use: "euclidean", "tanimoto"
 sample_size = 2500  # Sample size for metrics calculation
 

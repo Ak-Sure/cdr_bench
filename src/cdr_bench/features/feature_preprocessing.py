@@ -4,7 +4,7 @@ from typing import Optional, Union, Tuple
 
 import numpy as np
 import pandas as pd
-from rdkit import Chem
+from rdkit import Chem, DataStructs
 from rdkit.Chem import rdFingerprintGenerator
 from sklearn.preprocessing import StandardScaler
 
@@ -75,7 +75,7 @@ def gen_desc(generator: rdFingerprintGenerator, smi: str) -> Optional[np.ndarray
         return None
 
 # Added a function to generate RDKit fingerprints
-def gen_rdkit_desc(generator: rdFingerprintGenerator, smi: str) -> Optional[np.ndarray]:
+def gen_rdkit_desc(generator: rdFingerprintGenerator.GetRDKitFPGenerator, smi: str) -> Optional[np.ndarray]:
     """
     Generate a RDKit fingerprint as a NumPy array from a SMILES string.
 
@@ -90,7 +90,10 @@ def gen_rdkit_desc(generator: rdFingerprintGenerator, smi: str) -> Optional[np.n
         mol = Chem.MolFromSmiles(smi)
         if mol is None:
             return None
-        return generator.GetCountFingerprintAsNumPy(mol)
+        fp = generator.GetFingerprint(mol)
+        arr = np.zeros((1,))
+        DataStructs.ConvertToNumpyArray(fp, arr)
+        return arr
     except Exception as e:
         return None
 
@@ -159,5 +162,5 @@ def remove_constant_features(data_df: pd.DataFrame, indices: np.ndarray, feature
     #    data_df['fp'] = data_df['fp'].parallel_apply(lambda x: x[indices])
     #else:
     #    data_df['fp'] = data_df['fp'].apply(lambda x: x[indices])
-    data_df[feature_name] = data_df[feature_name].apply(lambda x: x[indices])
+    data_df.loc[:,feature_name] = data_df[feature_name].apply(lambda x: x[indices] if isinstance(x, np.ndarray) else x)
     return data_df

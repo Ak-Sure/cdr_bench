@@ -788,7 +788,7 @@ def calculate_metrics(
         cont_ls_list = np.zeros((num_repeats, len(k_neighbors)))
 
         for i in range(num_repeats):
-            indices = np.random.choice(len(ambient_dist), num_samples, replace=False)
+            indices = np.random.choice(len(ambient_dist), num_samples, replace=False)  #Does a random sampling of the indices
             sampled_dist_X = ambient_dist[indices][:, indices]
             sampled_dist_latent = latent_dist[indices][:, indices]
 

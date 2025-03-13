@@ -100,7 +100,13 @@ def process_files(config_file: str) -> None:
             dataset_name = file.stem       # Get the dataset name from the file name for example CHEMBL205
     
             df_temp = pd.read_csv(file, names=['smi'], sep='\s+')
-            df_temp=df_temp.head(1500)
+
+
+            '''Can change the number of molecules to process here'''
+            num_molecules = 1000  #Change this number accordingly
+            df_temp=df_temp.head(num_molecules)
+
+
             df_temp['dataset'] = dataset_name
             
             
@@ -109,15 +115,15 @@ def process_files(config_file: str) -> None:
                 
                 #mfpgen = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=1024)
                 rdkit_fpgen = rdFingerprintGenerator.GetRDKitFPGenerator()   #Use this to generate RDKit fingerprints
-                df_temp['mfp_r2_1024'] = df_temp['smi'].apply(lambda x: gen_rdkit_desc(rdkit_fpgen, x))
+                df_temp['RDKit_fp'] = df_temp['smi'].apply(lambda x: gen_rdkit_desc(rdkit_fpgen, x))
 
                 #df_temp['mfp_r2_1024'] = df_temp['smi'].apply(lambda x: gen_desc(mfpgen, x))
                 
-                df_temp = df_temp.dropna(subset=['mfp_r2_1024'])
-                df_temp = remove_duplicates(dataset_name, df_temp, 'mfp_r2_1024')
+                df_temp = df_temp.dropna(subset=['RDKit_fp'])
+                df_temp = remove_duplicates(dataset_name, df_temp, 'RDKit_fp')
 
                 if config["preprocess_descriptors"]:
-                    df_temp = preprocess_feature(df_temp, 'mfp_r2_1024')
+                    df_temp = preprocess_feature(df_temp, 'RDKit_fp')
 
             # Generate graph-based embeddings if enabled
             '''if config["generate_chemdist"] and model:
@@ -146,7 +152,7 @@ def process_files(config_file: str) -> None:
             # Save the DataFrame to HDF5
             save_dataframe_to_hdf5(df_temp, f"{output_path}/{dataset_name}.h5",
                                    non_feature_columns=['smi', 'dataset'],
-                                   feature_columns=['mfp_r2_1024'])
+                                   feature_columns=['RDKit_fp'])
 
         except Exception as e:
             print(f"Error processing {dataset_name}: {e}")

@@ -1,6 +1,6 @@
 # General Configuration
-data_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output\\"  # Path to the dataset
-output_dir = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output2\\"  # Path to save output files
+data_path = "../Test_FPS"  # Path to the dataset
+output_dir = "../Test_Output"  # Path to save output files
 test = false  # Whether to run in test mode
 plot_data = true  # Whether to plot data after processing
 

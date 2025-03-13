@@ -1,10 +1,10 @@
 # Paths for input and output files
 
-input_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\datasets\\"  # Path where input SMILES files are located
+input_path = "../Test_Dataset/"  # Path where input SMILES files are located
 file_pattern = "*.csv"  # File pattern for input files (e.g., "*.csv", "*.smi")
-output_path = "C:\\Users\\akash\\OneDrive\\Desktop\\DR\\New_DR\\cdr_bench\\Output\\"  # Path where output HDF5 files will be saved
+output_path = "../Test_FPS/"  # Path where output HDF5 files will be saved
 
-# Morgan Count Fingerptint generation settings
+# Morgan Count Fingerptint generation settings (Do not change anything, we have RDKit fingerprints by default, Changing this can cause error)
 [morgan]
 morgan_radius = 2  # Radius for Morgan fingerprints
 morgan_fp_size = 1024  # Size of the Morgan fingerprint (e.g., 1024 bits)

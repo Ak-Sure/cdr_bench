@@ -126,15 +126,26 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                 k_neighbors = sorted(k_neighbors)
 
         # Remove duplicates if any in DataFrame
+       
         data_df = remove_duplicates(dataset_name, dataset, feature_name)
+        
+        
         val_data_df = remove_duplicates(dataset_name, val_dataset, feature_name) if val_dataset is not None else None
 
-        # Prepare data for optimization
+        # Prepare data for optimization (KEPT SCALING AS "NO" FOR NOW)
+
         data_df, val_data_df, X_transformed, y_transformed = prepare_data_for_optimization(data_df, val_data_df,
                                                                                            feature_name,
                                                                                            scaling=scaling)
         # Create output directory
         dataset_output_dir = create_output_directory(output_dir, f"{dataset_name}/{feature_name}")
+
+
+        '''OPTIONALLY: CAN ADD FUNCTIONS FOR OTHER COORDINATE TRANSFROMATIONS LIKE SPHERICAL PROJECTION ETC BEFORE PCA'''
+
+        '''
+        # Perform spherical projection'''
+
 
         # Save initial PCA results
         X_pca_embedded, y_pca_embedded, pca = get_pca_results(X_transformed, y_transformed, dataset_output_dir,
@@ -142,8 +153,10 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
 
         pca_coords = X_pca_embedded if y_pca_embedded is None or optimization_type == 'outsample' else y_pca_embedded
 
-
         # Calculate distance matrices in latent and original spaces
+
+        '''THIS IS THE CALCULATION IN THE AMBIENT OR ORIGINAL SPACE'''
+
         if similarity_metric == 'tanimoto':
             data_to_use = dataset if val_dataset is None or optimization_type == 'outsample' else val_dataset
             ambient_dist = calculate_distance_matrix(np.vstack(data_to_use[feature_name]).astype(np.float64),
@@ -152,6 +165,9 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
             data_to_use = X_transformed if y_transformed is None or optimization_type == 'outsample' else y_transformed
             ambient_dist = calculate_distance_matrix(data_to_use,
                                                      metric=similarity_metric)
+            
+        
+        '''CALCULATION OF NEAREST NEIGHBORS IN THE AMBIENT SPACE AS WELL AS SCORING PARAMETERS'''
 
         # Prepare nearest neighbors in the ambient space and scoring parameters
         _, nn_indices_original = fit_nearest_neighbors(ambient_dist, max(k_neighbors))
@@ -169,6 +185,8 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
         for method in methods:
 
             # We don't need to perform optimization for the PCA
+
+            '''If there is a validation test, then take it. Else get the coordinates from the PCA'''
             if method == 'PCA':
                 if optimization_type == 'outsample':
                     coords = y_pca_embedded[:, :n_components]
@@ -176,7 +194,7 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                         ambient_dist = calculate_distance_matrix(val_dataset[feature_name].astype(np.float64),
                                                                  metric=similarity_metric)
                     else:
-                        ambient_dist = calculate_distance_matrix(y_transformed, metric=similarity_metric)
+                        ambient_dist = calculate_distance_matrix(y_transformed, metric=similarity_metric)   
                     _, nn_indices_original = fit_nearest_neighbors(ambient_dist,
                                                                    max(k_neighbors))  # TODO separate these functions
                 else:
@@ -205,6 +223,9 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                     coords = coords.astype(np.float64)
 
             # Calculating and saving neigborhood hit score
+
+            '''Calculating the distance matrix in the latent space using the euclidean metric'''
+
             latent_dist = calculate_distance_matrix(coords[:, :n_components], metric='euclidean')
             nn_overlap_list = calculate_nn_overlap_list(coords, nn_indices_original, k_neighbors, n_components)
 

@@ -158,12 +158,17 @@ def prepare_data_for_optimization(data_df: pd.DataFrame, val_data_df: Optional[p
             - scaled high-dimensional data (X_transformed)
             - scaled reference data (y_transformed, if validation data was provided)
     """
-
+    
     # Extract and scale the fingerprints from the main dataset
+    
     X = np.vstack(data_df[feature_name]).astype(np.float64)
+    print(f"Initial shape of X: {X.shape}")
     non_constant_indices = find_nonconstant_features(X)
     data_df = remove_constant_features(data_df, non_constant_indices, feature_name)
+
+
     X = np.vstack(data_df[feature_name]).astype(np.float64)
+    print(f"Shape of X after removing constant features: {X.shape}")
     if scaling is None or scaling == 'standardize':
         scaling_pipeline = Pipeline([
             ('standard_scaler', StandardScaler())
@@ -187,6 +192,7 @@ def prepare_data_for_optimization(data_df: pd.DataFrame, val_data_df: Optional[p
     scaling_pipeline.fit(X)
 
     X_transformed = scaling_pipeline.transform(X)
+    print(f"Shape of X_transformed: {X_transformed.shape}")
 
     # Load, preprocess, and scale the reference data if provided
     if val_data_df is not None:

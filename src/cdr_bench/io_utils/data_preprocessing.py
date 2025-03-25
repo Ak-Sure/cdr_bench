@@ -183,24 +183,30 @@ def prepare_data_for_optimization(data_df: pd.DataFrame, val_data_df: Optional[p
         scaling_pipeline = Pipeline([
             ('standard_scaler', StandardScaler(with_std=False))
         ])
-    elif scaling == 'no':
+    elif scaling == 'none':
         scaling_pipeline = Pipeline([
             ('no_op', FunctionTransformer())
         ])
 
     # Fit the pipeline to the data
-    scaling_pipeline.fit(X)
+    #scaling_pipeline.fit(X)
 
-    X_transformed = scaling_pipeline.transform(X)
+    X_transformed = X
     print(f"Shape of X_transformed: {X_transformed.shape}")
+
 
     # Load, preprocess, and scale the reference data if provided
     if val_data_df is not None:
+        print("Validation data provided.")
         val_data_df = remove_constant_features(val_data_df, non_constant_indices, feature_name)
         y = np.vstack(val_data_df[feature_name]).astype(np.float64)
-        y_transformed = scaling_pipeline.transform(y)
+        y_transformed = y #scaling_pipeline.transform(y)  #No transformation for the reference data
+        print(f"Shape of y_transformed: {y_transformed.shape}")
     else:
         y_transformed = None
+        print("No validation data provided.")
+  
+
     return data_df, val_data_df, X_transformed, y_transformed
 
 

@@ -18,6 +18,7 @@ from src.cdr_bench.io_utils.io import load_config, validate_config
 from src.cdr_bench.io_utils.io import save_optimization_results
 
 from collections import defaultdict, namedtuple
+import time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -127,10 +128,11 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
 
         # Remove duplicates if any in DataFrame
        
-        data_df = remove_duplicates(dataset_name, dataset, feature_name)
+        #data_df = remove_duplicates(dataset_name, dataset, feature_name)
+        data_df=dataset
         
-        
-        val_data_df = remove_duplicates(dataset_name, val_dataset, feature_name) if val_dataset is not None else None
+        #val_data_df = remove_duplicates(dataset_name, val_dataset, feature_name) if val_dataset is not None else None
+        val_data_df=val_dataset
 
         # Prepare data for optimization (KEPT SCALING AS "NO" FOR NOW)
 
@@ -138,6 +140,8 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                                                                                            feature_name,
                                                                                            scaling=scaling)
         # Create output directory
+
+        
         dataset_output_dir = create_output_directory(output_dir, f"{dataset_name}/{feature_name}")
 
 
@@ -145,8 +149,7 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
 
         '''
         # Perform spherical projection'''
-
-
+        
         # Save initial PCA results
         X_pca_embedded, y_pca_embedded, pca = get_pca_results(X_transformed, y_transformed, dataset_output_dir,
                                                               n_components)
@@ -165,8 +168,8 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
             data_to_use = X_transformed if y_transformed is None or optimization_type == 'outsample' else y_transformed
             ambient_dist = calculate_distance_matrix(data_to_use,
                                                      metric=similarity_metric)
-            
         
+       
         '''CALCULATION OF NEAREST NEIGHBORS IN THE AMBIENT SPACE AS WELL AS SCORING PARAMETERS'''
 
         # Prepare nearest neighbors in the ambient space and scoring parameters
@@ -182,17 +185,25 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
         MethodResult = namedtuple('MethodResult', ['metrics', 'coordinates'])
         optimization_results = defaultdict(lambda: MethodResult(metrics=None, coordinates=None))
 
+        print("Working so far")
+
         for method in methods:
 
             # We don't need to perform optimization for the PCA
+
+            '''1. X_transformed is the training dataset 
+               2. y_transformed is the test dataset'''
 
             '''If there is a validation test, then take it. Else get the coordinates from the PCA'''
             if method == 'PCA':
                 if optimization_type == 'outsample':
                     coords = y_pca_embedded[:, :n_components]
                     if similarity_metric == 'tanimoto':
-                        ambient_dist = calculate_distance_matrix(val_dataset[feature_name].astype(np.float64),
+                        
+                        ambient_dist = calculate_distance_matrix(np.vstack(val_dataset[feature_name]).astype(np.float64),
                                                                  metric=similarity_metric)
+                        
+                        
                     else:
                         ambient_dist = calculate_distance_matrix(y_transformed, metric=similarity_metric)   
                     _, nn_indices_original = fit_nearest_neighbors(ambient_dist,
@@ -204,11 +215,11 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                     # Perform optimization for the current method
                     optimizer = perform_optimization(method, method_grids[method], method_params[method],
                                                      X_transformed, None,
-                                                     optimization_scoring_params, dataset_output_dir)
+                                                     optimization_scoring_params, dataset_output_dir)    
                     coords = optimizer.estimator.transform(y_transformed)
                     coords = coords.astype(np.float64)
                     if similarity_metric == 'tanimoto':
-                        ambient_dist = calculate_distance_matrix(val_dataset[feature_name].astype(np.float64),
+                        ambient_dist = calculate_distance_matrix(np.vstack(val_dataset[feature_name]).astype(np.float64),
                                                                  metric=similarity_metric)
                     else:
                         ambient_dist = calculate_distance_matrix(y_transformed, metric=similarity_metric)
@@ -221,7 +232,8 @@ def process_dataset(dataset_name: str, feature_name: str, dataset: pd.DataFrame,
                                                      dataset_output_dir)
                     coords = optimizer.best_transformed  # TODO add an option to choose k for neigborhood hit calculation
                     coords = coords.astype(np.float64)
-
+            
+            
             # Calculating and saving neigborhood hit score
 
             '''Calculating the distance matrix in the latent space using the euclidean metric'''
@@ -386,4 +398,12 @@ if __name__ == "__main__":
 
 
     # Run the main function with the loaded config
+    #time the main function to see how long it takes
+    
+    start = time.time()
+    
     main(config)
+
+    end = time.time()
+
+    print(f"Time taken: {end - start} seconds")
